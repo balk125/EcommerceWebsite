@@ -1,0 +1,75 @@
+{% extends 'shop/basic.html' %}
+
+{% block title %}title of about {% endblock title %}
+{% block body %}
+<main role="main">
+    {% load static %}
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="display-3">My Awesome Cart!</h1>
+        <p>My Awesome Cart India  Private Limited is an Indian e-commerce company, headquartered in Bengaluru. Founded by Mr Bal Krishna Kanhaiya,Mr Mehul Sahu and  Mrs. Juhi Kumari in 2022.The company's focus on Electronics gadgets, Fashion Products, Health and Fitness Products,groceries and lifestyle products.</p>
+        
+        <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more &raquo;</a></p>
+      </div>
+    </div>
+  
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row">
+        <div class="col-md-4 card">
+          <h2>Bal Krishna Kanhaiya ( Founder )</h2>
+          <img src="/static/shop/kanhaiya.jpg"class="card-img-top" alt="..." >
+          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+          <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+        </div>
+        <div class="col-md-4 card">
+          <h2>Mehul Sahu ( Co Founder)</h2>
+          <p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+          <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+        </div>
+        <div class="col-md-4 card">
+          <h2>Juhi Kumari( CEO )</h2>
+          <p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
+          <p><a class="btn btn-secondary" href="#" role="button">View details &raquo;</a></p>
+        </div>
+      </div>
+  
+      <hr>
+  
+    </div> <!-- /container -->
+  
+  </main>
+
+
+  {% block js %}
+<script>
+
+  console.log('working')
+
+  if (localStorage.getItem('cart') == null) {
+
+    var cart = {};
+  }
+  else {
+    cart = JSON.parse(localStorage.getItem('cart'));
+    document.getElementById('cart').innerHTML = Object.keys(cart).length;
+  }
+
+
+  $('.cart').click(function () {
+
+    
+    document.getElementById('cart').innerHTML = Object.keys(cart).length;
+
+  });
+  $('#popcart').popover();
+  document.getElementById("popcart").setAttribute('data-content','<h5> Items in the Cart</h5>')
+
+
+</script>
+
+{% endblock js %} 
+
+{% endblock body %}
