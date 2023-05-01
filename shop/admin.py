@@ -12,4 +12,4 @@ admin.site.register(orders,view_id)
 admin.site.register(product)
 admin.site.register(Contact)
 admin.site.register(orderUpdate)
- 
+    
