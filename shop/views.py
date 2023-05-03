@@ -68,7 +68,7 @@ def signin( request):
 
 
 def signout(request):
-    pass
+    return redirect('signin')
 
 
 
@@ -78,6 +78,43 @@ def signout(request):
 
 
 def index(request):
+
+
+
+
+    if request.method=="POST":
+        username=request.POST.get('username')
+        email=request.POST.get('email')
+        password=request.POST.get('password')
+        user=authenticate(username=username,password=password)
+
+        if user is not None:
+            login(request,user)
+
+            allProds=[]
+            catprods=product.objects.values('category','id')
+            cats={item['category'] for item in catprods}
+            for cat in cats:
+                prod=product.objects.filter(category=cat)
+                n=len(prod)
+                nSlides=n//4 + ceil((n/4)-(n//4))
+                allProds.append([prod,range(1,nSlides ),nSlides])
+
+            params={'allProds':allProds,'username':username,'logout':'logout'}
+            return render(request,'shop/index.html',params)
+
+        else:
+            
+            return render(request,'shop/signin.html',{'error_msg':"Wrong username or password"})
+
+
+
+    return render(request,'shop/signin.html')
+
+
+
+
+
     # products=product.objects.all()
     # print(products)
     # n=len(products)
@@ -85,17 +122,19 @@ def index(request):
     # params={'no_of_Slides':nSlides,'product':products,'range':range(1,nSlides)}
     # allProds=[[products,range(1,nSlides),nSlides],
     # [products,range(1,nSlides),nSlides]]
-    allProds=[]
-    catprods=product.objects.values('category','id')
-    cats={item['category'] for item in catprods}
-    for cat in cats:
-        prod=product.objects.filter(category=cat)
-        n=len(prod)
-        nSlides=n//4 + ceil((n/4)-(n//4))
-        allProds.append([prod,range(1,nSlides ),nSlides])
 
-    params={'allProds':allProds}
-    return render(request,'shop/index.html',params)
+
+    # allProds=[]
+    # catprods=product.objects.values('category','id')
+    # cats={item['category'] for item in catprods}
+    # for cat in cats:
+    #     prod=product.objects.filter(category=cat)
+    #     n=len(prod)
+    #     nSlides=n//4 + ceil((n/4)-(n//4))
+    #     allProds.append([prod,range(1,nSlides ),nSlides])
+
+    # params={'allProds':allProds}
+    # return render(request,'shop/index.html',params)
 
 
 
