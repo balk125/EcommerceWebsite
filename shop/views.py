@@ -1,13 +1,81 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .models import product,Contact,orders,orderUpdate
 from math import ceil
 import json
 from django.views.decorators.csrf import csrf_exempt
 from PayTm import Checksum
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.contrib.auth import authenticate,login
 
 # Create your views here.
 MERCHANT_KEY = 'A5OlxmCou7VL9t2f'
+
+
+
+def signup( request):
+    if request.method=="POST":
+        # username=request.POST.get('username')
+        username=request.POST.get('username')
+        name=request.POST.get('name')
+        email=request.POST.get('email')
+        phone=request.POST.get('phone')
+        password=request.POST.get('password')
+        confirmPassword=request.POST.get('confirmPassword')
+        gender=request.POST.get('gender')
+        
+
+        myuser=User.objects.create_user(username,email,password)
+        myuser.full_name=name
+        myuser.save()
+
+        messages.success(request,"your registration has been successfully created")
+
+        return redirect('signin')
+    return render(request,'shop/signup.html')
+
+
+def signin( request):
+    if request.method=="POST":
+        username=request.POST.get('username')
+        email=request.POST.get('email')
+        password=request.POST.get('password')
+        user=authenticate(username=username,password=password)
+
+        if user is not None:
+            login(request,user)
+
+            allProds=[]
+            catprods=product.objects.values('category','id')
+            cats={item['category'] for item in catprods}
+            for cat in cats:
+                prod=product.objects.filter(category=cat)
+                n=len(prod)
+                nSlides=n//4 + ceil((n/4)-(n//4))
+                allProds.append([prod,range(1,nSlides ),nSlides])
+
+            params={'allProds':allProds,'username':username,'logout':'logout'}
+            return render(request,'shop/index.html',params)
+
+        else:
+            
+            return render(request,'shop/signin.html',{'error_msg':"Wrong username or password"})
+
+
+
+    return render(request,'shop/signin.html')
+
+
+def signout(request):
+    pass
+
+
+
+
+ 
+
+
 
 def index(request):
     # products=product.objects.all()
@@ -173,3 +241,5 @@ def handlerequest(request):
     return render(request, 'shop/paymentstatus.html', {'response': response_dict})
 
     # return HttpResponse('this is payment page')
+
+

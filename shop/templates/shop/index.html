@@ -54,6 +54,11 @@ padding-right: 0;
 {% load static %}
 <div class="container">
 
+  {% if username%}
+  <script>
+document.getElementById('signin').innerHTML='<p> welcome {{username}}'
+  </script>
+{% endif %}
   <!--Slideshow starts here -->
   {% for product,range,nSlides in allProds %}
   <h1 class="my-4">{{ product.0.category }}</h1>
@@ -208,6 +213,13 @@ padding-right: 0;
     document.getElementById('valpr' + a).innerHTML = cart['pr' + a][0];
     updateCart(cart);
   });
+
+
+
+
+
+
+
 </script>
 
 {% endblock js %}
